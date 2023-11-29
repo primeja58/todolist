@@ -1,11 +1,12 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
-import 'package:fast_app_base/common/dart/extension/datetime_extension.dart';
+import 'package:fast_app_base/common/data/memory/todo_data_holder.dart';
 import 'package:fast_app_base/screen/main/tab/tab_item.dart';
 import 'package:fast_app_base/screen/main/tab/tab_navigator.dart';
-import 'package:fast_app_base/screen/main/write/d_write_todo.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../common/common.dart';
+
 import 'w_menu_drawer.dart';
 
 class MainScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => MainScreenState();
 }
 
-class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin {
+class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMixin , TodoDataProvider{
   TabItem _currentTab = TabItem.todo;
   final tabs = [TabItem.todo, TabItem.search];
   final List<GlobalKey<NavigatorState>> navigatorKeys = [];
@@ -51,11 +52,7 @@ class MainScreenState extends State<MainScreen> with SingleTickerProviderStateMi
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: ()async{
-            final result = await WriteTodoBottomSheet().show();
-            if(result != null){
-              debugPrint(result.text);
-              debugPrint(result.dateTime.formattedDate);
-            }
+            todoData.addTodo();
           },
           child: const Icon(EvaIcons.plus),
         ),

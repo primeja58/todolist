@@ -6,10 +6,13 @@ import 'package:fast_app_base/common/widget/w_round_button.dart';
 import 'package:fast_app_base/screen/main/write/vo_write_to_result.dart';
 import 'package:flutter/material.dart';
 import 'package:nav/dialog/dialog.dart';
+import '../../../common/data/memory/vo_todo.dart';
 import '../../../common/widget/scaffold/bottom_dialog_scaffold.dart';
 
 class WriteTodoBottomSheet extends DialogWidget<WriteTodoResult> {
-  WriteTodoBottomSheet({super.key});
+  final Todo? todoForEdit;
+
+  WriteTodoBottomSheet({this.todoForEdit, super.key});
 
   @override
   State<StatefulWidget> createState() => _WriteTodoBottomSheetState();
@@ -20,6 +23,16 @@ class _WriteTodoBottomSheetState extends DialogState<WriteTodoBottomSheet>
   DateTime _selectedDate = DateTime.now();
   final textController = TextEditingController();
   final node = FocusNode();
+
+  @override
+  void initState() {
+    if(widget.todoForEdit != null){
+      _selectedDate = widget.todoForEdit!.dueDate;
+      textController.text = widget.todoForEdit!.title;
+    }
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +59,7 @@ class _WriteTodoBottomSheetState extends DialogState<WriteTodoBottomSheet>
                 focusNode: node,
                 controller: textController,
               )),
-              RoundButton(text: '추가', onTap: () {
+              RoundButton(text: isEditMode?'완료':'추가', onTap: () {
                 widget.hide(WriteTodoResult(_selectedDate, textController.text));
               })
             ],
@@ -55,6 +68,8 @@ class _WriteTodoBottomSheetState extends DialogState<WriteTodoBottomSheet>
       ),
     );
   }
+
+  bool get isEditMode => widget.todoForEdit!=null;
 
   void _selectDate() async {
     final date = await showDatePicker(

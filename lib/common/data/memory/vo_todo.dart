@@ -1,4 +1,4 @@
-import 'package:fast_app_base/common/data/memory/vo/todo_status.dart';
+import 'package:fast_app_base/common/data/memory/todo_status.dart';
 
 class Todo {
 
